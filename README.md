@@ -1,2 +1,4 @@
-# d3_with-force-demo_China-debt
-Demo using force simulation with D3 - Data shows size of debt to china
+# Foreign Debt to China
+Force simulation graph with D3
+
+Graph shows debt to China as % of nation's gdp
