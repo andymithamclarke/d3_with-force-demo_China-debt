@@ -194,10 +194,12 @@ const labelPosition = () => {
 
     labels.forEach(function(item, index) {
 
-        item.style.left = (xCenter[index] + "px";
-        item.style.top = '150px'
+        item.style.left = (xCenter[index] + (document.querySelector('.visualisation').getBoundingClientRect().width / 12)) + "px";
+        item.style.top = '170px'
 
     })
+
+
 
 }
 
