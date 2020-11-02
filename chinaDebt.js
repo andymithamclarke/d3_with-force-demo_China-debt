@@ -1,17 +1,12 @@
-console.log("China Debt")
-
-
-// Useful vars
-
-var xCenter = [0, 250, 500, 800, 1100];
-
-
 // Load in Data
 
 const debtData = d3.csv("china.csv")
                 .then(function(res) {
-                    console.log(res)
+                    
+                    // Clean Data Object 
                     const clean = createDataObject(res);
+
+                    // Create nodes
                     const nodes = nodeCreator(clean);
                     
                     // Function to force Simulation
@@ -27,7 +22,9 @@ const debtData = d3.csv("china.csv")
                         }))
                         .on("tick", ticked)
                     
-                    
+
+                    // Call function to position labels 
+                    labelPosition()
                     
                     // Function to be called on tick
 
@@ -52,11 +49,11 @@ const debtData = d3.csv("china.csv")
                                 return d.x + 200;
                             })
                             .attr("cy", function(d) {
-                                return d.y + 400;
+                                return d.y + 350;
                             })
                             .on("mouseover", function(d, i) {
                                 this.style.opacity = 0.7;
-                                d3.select('#tooltip').transition().duration(200).style('opacity', 1).text(d.country + "   " + d.r)
+                                d3.select('#tooltip').transition().duration(200).style('opacity', 1).text(d.country + "   " + d.r + "%")
                                              
                             })
                             .on("mousemove", function(d, i) {
@@ -80,7 +77,7 @@ const nodeCreator = (data) => {
 
     const numNodes = data.length;
     const myScaleColor = d3.scaleLinear()
-					.domain([0, 5])
+                    .domain([0, 5])
                     .range(["#4056A1", "#F13C20"]);
     
     const nodes = data.map(function(d, i) {
@@ -172,3 +169,39 @@ const createTooltip = function() {
         .style("opacity", 0)
     return tooltip
 }
+
+
+
+// Function to return array of dynamic xPositions
+const pageWidthScale = function() {
+
+    const pageWidth = document.querySelector('.visualisation').getBoundingClientRect().width;
+
+    const myScaleWidth = d3.scaleLinear()
+                    .domain([0, 5])
+                    .range([0, pageWidth - (pageWidth / 10)]);
+
+    return [myScaleWidth(0), myScaleWidth(1), myScaleWidth(2), myScaleWidth(3), myScaleWidth(4)];
+    
+}
+
+
+// Function to position labels dynamically
+
+const labelPosition = () => {
+
+    const labels = document.querySelectorAll('.label');
+
+    labels.forEach(function(item, index) {
+
+        item.style.left = (xCenter[index] + (document.querySelector('.visualisation').getBoundingClientRect().width / 10)) + "px";
+        item.style.top = '150px'
+
+    })
+
+}
+
+
+// Useful vars
+
+var xCenter = pageWidthScale();
